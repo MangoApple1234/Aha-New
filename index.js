@@ -6,14 +6,6 @@ const fs = require('fs');
 const gistbase = "https://prod-api-cached-2.viewlift.com/content/pages?site=aha-tv&includeContent=true&moduleOffset=0&moduleLimit=5&languageCode=default&countryCode=IN&path=";
 const moviebase = "https://prod-api.viewlift.com/entitlement/video/status?deviceType=web_browser&contentConsumption=web&id=";
 
-fs.readFile('token.tuhin', (err, data) => {
-    if (err) {
-        console.log("Error to import Token")
-    } else {
-        var token = data;
-    };
-});
-
 app.get('/', (req, res) => {
     res.send(`Server is Running`)
 })
