@@ -42,7 +42,7 @@ node index.js
 
 ### Credits 
 
-- Research by **[Manoj](https://t.me/manu855 "Manoj")**
+- Research by **[Manoj](https://github.com/manoj855 "Manoj")**
 - Code to **[Me](https://thetuhin.com "Me")**
 <br><br><br>
 
