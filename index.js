@@ -19,41 +19,43 @@ app.get('/movie', (req, res) => {
     };
     request(options, function(error, response) {
         if (error) {
-            console.log("Something error happened")
+            res.send(`{"result":"false"}`)
         } else {
             fs.readFile('token.tuhin', (err, data) => {
                 if (err) {
-                    console.log("Error to import Token")
+                    res.send(`{"result":"notoken"}`)
                 } else {
                     var token = data;
                     var gistr = JSON.parse(response.body);
-                    var gistid = gistr.modules[1].contentData[0].gist.id;
-
-                    var request = require('request');
-                    var options = {
-                        'method': 'GET',
-                        'url': moviebase + gistid,
-                        'headers': {
-                            'authorization': token
-                        }
-                    };
-                    request(options, function(error, response) {
-                        if (error) {
-                            console.log("Something error happened")
-                        } else {
-                            var movied = JSON.parse(response.body);
-                            var movietitle = movied.video.gist.title;
-                            var imageurl = movied.video.gist.posterImageUrl;
-                            var qone = movied.video.streamingInfo.videoAssets.mpeg[0].renditionValue;
-                            var qonelink = movied.video.streamingInfo.videoAssets.mpeg[0].url;
-                            var qtwo = movied.video.streamingInfo.videoAssets.mpeg[1].renditionValue;
-                            var qtwolink = movied.video.streamingInfo.videoAssets.mpeg[1].url;
-                            var qthree = movied.video.streamingInfo.videoAssets.mpeg[2].renditionValue;
-                            var qthreelink = movied.video.streamingInfo.videoAssets.mpeg[2].url;
-                            var slinks = movied.video.streamingInfo.videoAssets.hlsDetail.url;
-                            res.send(`{"title":"` + movietitle + `","poster":"` + imageurl + `","download` + qone + `":"` + qonelink + `","download` + qtwo + `":"` + qtwolink + `","download` + qthree + `":"` + qthreelink + `","streaming_link":"` + slinks + `"}`)
+                    if (gistr.modules == undefined) {
+                        res.send(`{"result":"false"}`)
+                    } else {
+                        var gistid = gistr.modules[1].contentData[0].gist.id;
+                        var options = {
+                            'method': 'GET',
+                            'url': moviebase + gistid,
+                            'headers': {
+                                'authorization': token
+                            }
                         };
-                    });
+                        request(options, function(error, response) {
+                            if (error) {
+                                res.send(`{"result":"false"}`)
+                            } else {
+                                var movied = JSON.parse(response.body);
+                                var movietitle = movied.video.gist.title;
+                                var imageurl = movied.video.gist.posterImageUrl;
+                                var qone = movied.video.streamingInfo.videoAssets.mpeg[0].renditionValue;
+                                var qonelink = movied.video.streamingInfo.videoAssets.mpeg[0].url;
+                                var qtwo = movied.video.streamingInfo.videoAssets.mpeg[1].renditionValue;
+                                var qtwolink = movied.video.streamingInfo.videoAssets.mpeg[1].url;
+                                var qthree = movied.video.streamingInfo.videoAssets.mpeg[2].renditionValue;
+                                var qthreelink = movied.video.streamingInfo.videoAssets.mpeg[2].url;
+                                var slinks = movied.video.streamingInfo.videoAssets.hlsDetail.url;
+                                res.send(`{"title":"` + movietitle + `","poster":"` + imageurl + `","download` + qone + `":"` + qonelink + `","download` + qtwo + `":"` + qtwolink + `","download` + qthree + `":"` + qthreelink + `","streaming_link":"` + slinks + `"}`)
+                            };
+                        });
+                    }
                 };
             });
         };
